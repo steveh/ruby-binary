@@ -26,8 +26,11 @@ jobs:
       - name: Build
         run: ./build.sh ${{ github.event.inputs.ruby_version }}
 
-      - name: Upload
-        uses: actions/upload-artifact@v4
+      - name: Release
+        uses: softprops/action-gh-release@v2
         with:
-          name: ruby-${{ github.event.inputs.ruby_version }}-linux-${{ env.ARCH }}.tar.gz
-          path: ruby-${{ github.event.inputs.ruby_version }}-linux-${{ env.ARCH }}.tar.gz
+          name: ${{ github.event.inputs.ruby_version }}
+          tag_name: ${{ github.event.inputs.ruby_version }}
+          fail_on_unmatched_files: true
+          make_latest: true
+          files: ruby-${{ github.event.inputs.ruby_version }}-linux-${{ env.ARCH }}.tar.gz
