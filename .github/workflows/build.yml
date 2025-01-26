@@ -1,4 +1,4 @@
-name: Build and Upload Ruby Version to S3
+name: Build and Upload Ruby
 
 on:
   workflow_dispatch:
@@ -18,7 +18,7 @@ jobs:
 
       - name: Install dependencies
         run: |
-          apt-get install -y autoconf patch build-essential rustc libssl-dev libyaml-dev libreadline6-dev zlib1g-dev libgmp-dev libncurses5-dev libffi-dev libgdbm6 libgdbm-dev libdb-dev uuid-dev
+          sudo apt-get install -y autoconf patch build-essential rustc libssl-dev libyaml-dev libreadline6-dev zlib1g-dev libgmp-dev libncurses5-dev libffi-dev libgdbm6 libgdbm-dev libdb-dev uuid-dev
 
       - name: Set architecture variable
         run: echo "ARCH=$(uname -m)" >> $GITHUB_ENV
