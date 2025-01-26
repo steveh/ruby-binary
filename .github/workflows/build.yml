@@ -1,0 +1,33 @@
+name: Build and Upload Ruby Version to S3
+
+on:
+  workflow_dispatch:
+    inputs:
+      ruby_version:
+        description: "Ruby version to compile (e.g. 3.3.7)"
+        required: true
+        type: string
+
+jobs:
+  build_and_upload:
+    runs-on: ubuntu-24.04-arm
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install dependencies
+        run: |
+          apt-get install -y autoconf patch build-essential rustc libssl-dev libyaml-dev libreadline6-dev zlib1g-dev libgmp-dev libncurses5-dev libffi-dev libgdbm6 libgdbm-dev libdb-dev uuid-dev
+
+      - name: Set architecture variable
+        run: echo "ARCH=$(uname -m)" >> $GITHUB_ENV
+
+      - name: Build
+        run: ./build.sh ${{ github.event.inputs.ruby_version }}
+
+      - name: Upload
+        uses: actions/upload-artifact@v4
+        with:
+          name: ruby-${{ github.event.inputs.ruby_version }}-linux-${{ env.ARCH }}.tar.gz
+          path: ruby-${{ github.event.inputs.ruby_version }}-linux-${{ env.ARCH }}.tar.gz
